@@ -1,0 +1,22 @@
+{
+    "manifest_version": 3,
+    "name": "Meeting Assistant",
+    "version": "0.0.1",
+    "action": {
+        "default_title": "Click to open Meeting Assistant"
+    },
+    "background": {
+        "service_worker": "background/service_worker.js",
+        "type": "module"
+    },
+    "side_panel": {
+        "default_path": "sidepanel/sidepanel.html"
+    },
+    "permissions": [
+        "offscreen",
+        "tabCapture",
+        "sidePanel",
+        "tabs",
+        "activeTab"
+    ]
+}
