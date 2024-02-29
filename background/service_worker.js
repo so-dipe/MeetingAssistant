@@ -10,7 +10,7 @@ chrome.action.onClicked.addListener(async (tab) => {
         console.log('Audio is already being captured')
         return;
     }
-    console.log('Clicked')
+    
     const existingContexts = await chrome.runtime.getContexts({});
     
     const offScreenDocument = existingContexts.find(
@@ -29,12 +29,20 @@ chrome.action.onClicked.addListener(async (tab) => {
         targetTabId: tab.id
     });
 
+    chrome.scripting.executeScript({
+        target: {tabId: tab.id},
+        files: ['scripts/record_mic.js']
+    }).then(
+        console.log('Script executed')
+    )
+
     chrome.runtime.sendMessage({
         type: 'start-recording',
         target: 'offscreen',
         data: streamId,
         tabInfo: tab
     });
+
     capturing = true;
 });
 

@@ -1,4 +1,5 @@
 let media;
+let mic;
 
 chrome.runtime.onMessage.addListener(async (message) => {
     if (message.target !== 'offscreen') return;
@@ -8,10 +9,9 @@ chrome.runtime.onMessage.addListener(async (message) => {
             audio : {
                 mandatory: {
                     chromeMediaSource: 'tab',
-                    chromeMediaSourceId: message.data
+                    chromeMediaSourceId: message.data,
                 },
-            },
-            video: false
+            }
         });
 
         const ws = new WebSocket('ws://localhost:8000/api/v1/transcribe/transcribe')
@@ -20,7 +20,7 @@ chrome.runtime.onMessage.addListener(async (message) => {
             console.log('WebSocket connection opened');
         });
 
-        const audioTracks = media.getAudioTracks();
+        const audioTracks = media.getTracks();
         console.log('Audio tracks:', audioTracks)
 
         if (audioTracks.length > 0) {
@@ -32,7 +32,10 @@ chrome.runtime.onMessage.addListener(async (message) => {
             recorder.onstart = () => {
                 console.log('MediaRecorder started recording');
             };
-
+            recorder.onstop = () => {
+                console.log('MediaRecorder stopped recording');
+                ws.close();
+            };
             recorder.ondataavailable = (event) => {
                 console.log('Data available:', event);
                 if (event.data.size > 0) {
@@ -60,5 +63,7 @@ chrome.runtime.onMessage.addListener(async (message) => {
         });
     }
 });
+
+
 
 

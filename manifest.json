@@ -16,7 +16,7 @@
         "offscreen",
         "tabCapture",
         "sidePanel",
-        "tabs",
-        "activeTab"
+        "activeTab",
+        "scripting"
     ]
 }
